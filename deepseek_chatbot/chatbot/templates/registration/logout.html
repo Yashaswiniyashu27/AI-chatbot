@@ -1,0 +1,141 @@
+{% extends "chatbot/base.html" %}
+
+{% block extra_css %}
+<style>
+    .logout-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .logout-card {
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: none;
+        overflow: hidden;
+        transform: translateY(0);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        max-width: 450px;
+        width: 100%;
+    }
+    
+    .logout-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .logout-card .card-body {
+        padding: 2.5rem;
+        text-align: center;
+    }
+    
+    .logout-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: #dc3545;
+        animation: pulse 2s infinite;
+    }
+    
+    .logout-title {
+        color: var(--bs-dark);
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .logout-message {
+        color: var(--bs-gray-600);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+    }
+    
+    .btn-logout {
+        padding: 0.7rem 2rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    }
+    
+    .btn-logout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+    }
+    
+    .btn-cancel {
+        padding: 0.7rem 2rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .btn-cancel:hover {
+        background-color: var(--bs-gray-200);
+    }
+    
+    /* Dark mode support */
+    [data-bs-theme="dark"] .logout-card {
+        background-color: var(--bs-secondary-bg);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    [data-bs-theme="dark"] .logout-title {
+        color: var(--bs-light);
+    }
+    
+    [data-bs-theme="dark"] .logout-message {
+        color: var(--bs-gray-400);
+    }
+    
+    [data-bs-theme="dark"] .btn-cancel:hover {
+        background-color: var(--bs-gray-800);
+    }
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logout-container">
+    <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card logout-card">
+            <div class="card-body">
+                <div class="logout-icon">
+                    <i class="bi bi-door-open"></i>
+                </div>
+                <h2 class="logout-title">Ready to leave?</h2>
+                <p class="logout-message">
+                    Are you sure you want to log out? You'll need to sign in again to access your chat sessions.
+                </p>
+                
+                <div class="action-buttons">
+                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-logout me-2">
+                            <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                        </button>
+                    </form>
+                    <a href="{% url 'index' %}" class="btn btn-outline-secondary btn-cancel">
+                        <i class="bi bi-arrow-left me-2"></i> Stay Logged In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

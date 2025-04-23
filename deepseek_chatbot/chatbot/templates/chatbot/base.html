@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* Dark mode styles */
+        [data-bs-theme="dark"] {
+            --bs-body-bg: #212529;
+            --bs-body-color: #f8f9fa;
+            --bs-secondary-bg: #2c3034;
+            
+            .navbar-dark {
+                background-color: var(--bs-dark) !important;
+            }
+            
+            .bg-light {
+                background-color: var(--bs-secondary-bg) !important;
+            }
+            
+            .text-dark {
+                color: var(--bs-light) !important;
+            }
+            
+            /* Add any additional dark mode styles for your chat interface */
+            .chat-container {
+                background-color: var(--bs-secondary-bg);
+                border-color: #495057;
+            }
+            
+            .message-input {
+                background-color: #343a40;
+                color: #f8f9fa;
+                border-color: #495057;
+            }
+        }
+    </style>
+    <script>
+        // Set theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved theme or use system preference
+            const savedTheme = localStorage.getItem('theme') || 
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+
+            // Initialize Bootstrap tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Confirmation for delete forms
+            document.querySelectorAll('form.delete-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!confirm('Are you sure you want to delete this chat session?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">Gemini AI Chat</a>
+            <div class="d-flex align-items-center">
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">Hello, {{ user.username }}</span>
+                {% endif %}
+                
+                <!-- Dark mode toggle button -->
+                <button id="themeToggle" class="btn btn-sm btn-outline-light me-2">
+                    <i class="bi bi-sun-fill d-none"></i>
+                    <i class="bi bi-moon-fill"></i>
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}" class="d-inline ms-2">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light ms-2">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const iconSun = themeToggle.querySelector('.bi-sun-fill');
+            const iconMoon = themeToggle.querySelector('.bi-moon-fill');
+            
+            function updateIcons() {
+                const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+                iconSun.classList.toggle('d-none', !isDark);
+                iconMoon.classList.toggle('d-none', isDark);
+                themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+                
+                // Update tooltip if it exists
+                if (themeToggle._tooltip) {
+                    themeToggle._tooltip.update();
+                }
+            }
+            
+            // Initialize icons
+            updateIcons();
+            
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                // Set the new theme
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Update the icons
+                updateIcons();
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

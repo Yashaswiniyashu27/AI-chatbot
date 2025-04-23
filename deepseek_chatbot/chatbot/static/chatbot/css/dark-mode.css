@@ -1,0 +1,29 @@
+[data-bs-theme="dark"] {
+    --bs-body-bg: #212529;
+    --bs-body-color: #f8f9fa;
+    --bs-secondary-bg: #2c3034;
+    
+    .chat-container {
+      background-color: #2c3034;
+      border-color: #495057;
+    }
+    
+    .ai-message .message-content {
+      background-color: #495057;
+      color: #f8f9fa;
+    }
+    
+    .typing-indicator {
+      background-color: #495057;
+    }
+    
+    .message-time {
+      color: #adb5bd;
+    }
+    
+    #message-input {
+      background-color: #2c3034;
+      color: #f8f9fa;
+      border-color: #495057;
+    }
+  }

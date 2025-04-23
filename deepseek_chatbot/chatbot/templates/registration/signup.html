@@ -1,0 +1,27 @@
+{% extends "chatbot/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2 class="mb-4">Sign Up</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="id_username" required>
+                <small class="text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+            </div>
+            <div class="mb-3">
+                <label for="id_password1" class="form-label">Password</label>
+                <input type="password" name="password1" class="form-control" id="id_password1" required>
+            </div>
+            <div class="mb-3">
+                <label for="id_password2" class="form-label">Password confirmation</label>
+                <input type="password" name="password2" class="form-control" id="id_password2" required>
+                <small class="text-muted">Enter the same password as before, for verification.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
